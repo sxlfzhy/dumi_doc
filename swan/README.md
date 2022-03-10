@@ -10,10 +10,10 @@
 * [配置小程序](config.md)
 * [小程序框架](framework.md)
   - [介绍](framework.md)
-  - [逻辑层](app-service)
-  - 视图层
-* 发布上线
-* 开发文档
-    - 框架接口
-    - 组件
-    - API
+  - [逻辑层](app-service.md)
+  - [视图层](app-view.md)
+* [发布上线](publish.md)
+* [开发文档](development.md)
+    - [框架接口](interface.md)
+    - [组件](component.md)
+    - [API](apis.md)
