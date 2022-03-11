@@ -74,7 +74,8 @@ app.json 是当前小程序的全局配置，包括了小程序的所有页面�
 }
 ```
 
-参数介绍：
+参数介绍:
+
 | 属性 | 类型 | 默认值 | 描述 |
 | :---: | :-----: | :----: | :-------: |
 | `backgroundColor` | string | #ffffff | 窗口的背景色|
@@ -82,10 +83,7 @@ app.json 是当前小程序的全局配置，包括了小程序的所有页面�
 
 ## TS 逻辑
 
-说明一下小程序的逻辑控制都支持TS代码，帖两个最简单的app.ts和page.ts的描述。
-链接到typescript官网--英文网站
-
-小程序代码逻辑原生支持`typescript`编写，如下例子：
+小程序代码逻辑原生支持`TypeScript`编写，例子如下：
 
 * app.ts:
 
@@ -128,19 +126,24 @@ export default {
 </script>
 ```
 
+* [TypeScrip官方文档](https://www.typescriptlang.org/)
+
 ## Vue 模板
 
 1、我们vue模板的组成
 2、标签体系，后续我们要链接到组件文档那里，说明一下样式体系都是flutter的
 
+小度小程序使用类似Vue的模板语法，但与Vue模板语法有些许不同，小度小程序的模板语法中使用flutter进行渲染，需要使用flutter提供的组件和样式规范进行编码，具体模板类型如下：
 
-### 标签体系
+```ts
+// 模板结构
+<template>
+    <container class="page-container">
+        <text class="page-title">hello world</text>
+    </container>
+</template>
 
-参考：https://developers.weixin.qq.com/miniprogram/dev/framework/quickstart/code.html#WXML-%E6%A8%A1%E6%9D%BF
-
-### class样式
-
-重点说明一下我的class样式，大概就是下边这种形式
+// 样式结构
 <script data-is-style>
 atom.reusableStylesManager.add([
     [
@@ -148,6 +151,103 @@ atom.reusableStylesManager.add([
         ContainerStyles.c({
             color: Color.fromRGBO(255, 255, 255, 1)
         })
+    ],
+    [
+        'page-title',
+        TextStyles.c({
+            fontSize: 32,
+            color: Color.fromRGBO(0, 0, 0, 1)
+        })
     ]
 ]);
 </script>
+
+// js结构
+<script lang="ts">
+export default {
+    setup() {
+        return {};
+    }
+};
+</script>
+```
+
+### 标签体系
+
+如上案例所示，在标签语法中，跟微信小程序有所不同，小度小程序需要遵循atom-flutter的标签语法规范：
+
+```html
+<template>
+    <container>
+        <text>hello world<text>
+    </container>
+</template>
+```
+
+* 详见 [flutter标签语法](http://10.24.7.83:8080/docs/)
+
+### class样式
+
+重点说明一下我的class样式，大概就是下边这种形式
+
+在小度小程序的样式使用中，class样式的需要定义在`atom.reusableStylesManager`中，单个class样式使用数据结构存储，在小度小程序中，同样支持class类名和style样式这两种引入方式：
+
+* class样式
+
+  * 类名
+  * 样式结构
+
+``` html
+<template>
+    <container class="page-container">
+        <text>hello world<text>
+    </container>
+</template>
+
+<script data-is-style>
+atom.reusableStylesManager.add([
+    [
+        'page-container', // 类名
+        ContainerStyles.c({
+            color: Color.fromRGBO(255, 255, 255, 1)
+        })
+    ]
+]);
+</script>
+```
+
+如果是存在动态样式需要使用$style包裹class类名:
+
+```html
+<template>
+    <container :class="[$style['page-container'], active ? $style['page-container-active'] : null">
+        <text>hello world<text>
+    </container>
+</template>
+<script lang="ts">
+export default {
+    setup() {
+        return {
+            active: true
+        };
+    }
+};
+</script>
+
+```
+
+* style样式
+
+``` html
+<template>
+    <container :style="
+        ContainerStyles.c({
+            width: 800,
+            height: 200,
+            color: Color.fromRGBO(255, 255, 255, 1)
+        })
+    ">
+        <text>hello world<text>
+    </container>
+</template>
+```
