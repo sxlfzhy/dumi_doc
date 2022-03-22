@@ -1,8 +1,5 @@
 # 开始
 
-<!-- 本文档需要说明小程序的新建、设备配置、搭建开发环境的完整流程。
-参考文档：[https://developers.weixin.qq.com/miniprogram/dev/framework/quickstart/getstart.html](https://developers.weixin.qq.com/miniprogram/dev/framework/quickstart/getstart.html) -->
-
 **开发小程序的第一步，你需要拥有一个小程序帐号，通过这个帐号你就可以管理你的小程序。**
 
 **跟随这个教程，开始你的小程序之旅吧！**
