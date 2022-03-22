@@ -1,12 +1,12 @@
 # 小程序代码构成
 
-参考文档：[https://developers.weixin.qq.com/miniprogram/dev/framework/quickstart/code.html](https://developers.weixin.qq.com/miniprogram/dev/framework/quickstart/code.html)
+<!-- 参考文档：[https://developers.weixin.qq.com/miniprogram/dev/framework/quickstart/code.html](https://developers.weixin.qq.com/miniprogram/dev/framework/quickstart/code.html)
 
 通过一个hello小程序帮助开发者对小程序的代码有一个基本了解，简单介绍一下json配置、vue文件构成、标签语法、ts文件。
 
 1、介绍project.config.js
 2、介绍hello小程序src目录下的代码
-
+-->
 ## JSON 配置
 
 ### 项目配置 project.config.js
@@ -35,7 +35,7 @@ module.exports = {
 
 app.json 是当前小程序的全局配置，包括了小程序的所有页面路径、界面表现、权限、网络超时等。app.json 配置内容如下：
 
-```json
+``` json
 {
     "entryPagePath": "pages/home/home",
     "pages": [
@@ -67,7 +67,7 @@ app.json 是当前小程序的全局配置，包括了小程序的所有页面�
 
 每一个小程序页面也可以使用同名 .json 文件来对本页面的窗口表现进行配置，页面中配置项会覆盖 app.json 的 window 中相同的配置项。详细配置如下：
 
-```json
+``` json
 {
     "backgroundColor": "#000000",
     "navigationBarTitleText": "标题示例"
@@ -87,7 +87,7 @@ app.json 是当前小程序的全局配置，包括了小程序的所有页面�
 
 * app.ts:
 
-```ts
+``` typescript
 import {ref} from '@atom-vue/vue';
 import swan from 'kuat';
 
@@ -105,7 +105,7 @@ swan.App({
 
 * page.ts:
 
-```ts
+``` typescript
 <script lang="ts">
 import {ref} from '@atom-vue/vue';
 import swan from 'kuat';
@@ -135,7 +135,7 @@ export default {
 
 小度小程序使用类似Vue的模板语法，但与Vue模板语法有些许不同，小度小程序的模板语法中使用flutter进行渲染，需要使用flutter提供的组件和样式规范进行编码，具体模板类型如下：
 
-```ts
+``` vue
 // 模板结构
 <template>
     <container class="page-container">
@@ -176,7 +176,7 @@ export default {
 
 如上案例所示，在标签语法中，跟微信小程序有所不同，小度小程序需要遵循atom-flutter的标签语法规范：
 
-```html
+``` vue
 <template>
     <container>
         <text>hello world<text>
@@ -197,7 +197,7 @@ export default {
   * 类名
   * 样式结构
 
-``` html
+``` vue
 <template>
     <container class="page-container">
         <text>hello world<text>
@@ -218,7 +218,7 @@ atom.reusableStylesManager.add([
 
 如果是存在动态样式需要使用$style包裹class类名:
 
-```html
+``` vue
 <template>
     <container :class="[$style['page-container'], active ? $style['page-container-active'] : null">
         <text>hello world<text>
@@ -238,7 +238,7 @@ export default {
 
 * style样式
 
-``` html
+``` vue
 <template>
     <container :style="
         ContainerStyles.c({
