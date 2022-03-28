@@ -23,7 +23,7 @@ npm run onload
 ```
 
 * 上传本地程序代码到平台进行保存。[开发者认证](https://dueros.baidu.com/didp/register/registerinfo) 这是必须的，只有开发者才能管理小程序的发布开发上线
-  ![发布上线](./assert/fabushangxian.png)
+  ![发布上线](assets/fabushangxian.png)
 **上传成功且进行开发者认证后**登录[百度DUEROS开放平台](https://dueros.baidu.com/dbp)-发布上线，就可以找到刚刚上传的小程序版本代码，进行上线操作
 
 ## 提交审核

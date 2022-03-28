@@ -1,111 +1,152 @@
 # 小程序代码构成
 
-<!-- 参考文档：[https://developers.weixin.qq.com/miniprogram/dev/framework/quickstart/code.html](https://developers.weixin.qq.com/miniprogram/dev/framework/quickstart/code.html)
+上一章，我们通过 swan_app 命令初始化了一个 QuickStart 项目。你可以留意到这个项目里边生成了不同类型的文件:
 
-通过一个hello小程序帮助开发者对小程序的代码有一个基本了解，简单介绍一下json配置、vue文件构成、标签语法、ts文件。
+1. `.json` 后缀的 `JSON` 配置文件
+1. `.vue` 后缀的 `Vue` 模板文件
+1. `.ts` 后缀的 `typescript` 脚本逻辑文件
 
-1、介绍project.config.js
-2、介绍hello小程序src目录下的代码
--->
-## JSON 配置
+## 配置文件
 
-### 项目配置 project.config.js
+小程序中的静态配置文件主要有 `json` 和 `js` 两种形式。  
 
-#### 1、 小程序运行时项目配置
+* JS 配置文件主要用于开发工具配置；
+* JSON 是一种数据格式，并不是编程语言，在小程序中，JSON扮演的静态配置的角色；
 
-```js
+在QuickStart项目中，我们可以看到以下配置：
+
+* 根目录下有一个 `project.config.js`
+* src 目录下有一个 `app.json`
+* pages/home 目录下还有一个 `home.json`
+
+我们依次来说明一下它们的用途。
+
+### 工具配置 project.config.js
+
+小程序开发者工具在每个项目的根目录都会生成一个 project.config.js，主要是开发过程中和小度设备实现联动所必须的个性化配置，
+其中包括：技能ID、技能签名SK以及预览设备的相关信息。
+
+> 该配置内容对应 `swan_app create` 命令过程中的输入项
+
+#### 配置项
+
+| 属性 | 必填 | 说明 |
+| :---: | :---: | :---: |
+| botId | 是 | 技能id，技能开放平台创建技能时生成的技能唯一标识，符合36位UUID规范 | 
+| sk | 是 | 密钥（签名Key），技能开放平台创建技能时生成的访问密钥，见：技能基础信息中的签名Key | 
+| cuid | 是 | 设备id（序列号），设备唯一标识，即设备底部sn，大写字母和数字组合 | 
+| phone | 是 | 设备绑定的百度账号对应的手机号码 | 
+| entryPagePath | 否 | debug进入小程序打开的页面路径，默认：小程序首页 | 
+
+
+#### 示例
+
+``` javascript
 module.exports = {
-    botId: '{{botId}}',
-    sk: '{{sk}}',
-    cuid: '{{cuid}}',
-    phone: '{{phone}}',
+    botId: 'aef6cfb5-fa7f-048d-2cc2-db8b8221de33',
+    sk: '1683ebd9-e07b-bz79-8d88-c4ade13af366',
+    cuid: '8B19429D10144208',
+    phone: '187****4920',
     entryPagePath: ''
 };
 ```
 
-#### 2、必要参数
-
-* (必要) `botId`： 小程序技能id
-* (必要) `sk`： 密钥（签名Key），技能开放平台创建技能时生成的访问密钥，符合36位UUID规范。见：技能基础信息中的签名Key
-* (必要) `cuid`： 设备id（序列号），设备唯一标识，即设备底部sn，为大写子母和数字组合
-* (必要) `phone`： 小度app登录的百度账号所绑定的手机号码
-* (可选) `entryPagePath`： 小程序打开的页面路径，默认：小程序首页
 
 ### 小程序配置 app.json
 
-app.json 是当前小程序的全局配置，包括了小程序的所有页面路径、界面表现、权限、网络超时等。app.json 配置内容如下：
+app.json 是当前小程序的全局配置，包括了小程序的所有页面路径、界面表现、权限、网络超时等。QuickStart 项目里边的 `app.json` 配置内容如下：
 
 ``` json
 {
-    "entryPagePath": "pages/home/home",
     "pages": [
-        "pages/home/home",
+        "pages/home/home"
     ],
     "window": {
-        "backgroundColor": "#000000",
+        "backgroundColor": "#ff000000",
         "navigationBarTextStyle": "black"
-    },
-    "debug": true,
-    "networkTimeout": {
-        "request": 10000
     }
 }
 ```
 
-参数介绍：
+我们简单说一下这个配置各个项的含义:
 
-| 属性 | 类型 | 必填 | 描述 |
-| :---: | :-----: | :----: | :--------------------: |
-| `entryPagePath` | string | 否 | 小程序默认启动首页入口|
-| `pages` | string[] | 是 | 页面路径列表|
-| `window` | Object | 否 | 全局默认窗口表现配置|
-| `debug` | boolean | 否 | 是否开启debug模式，默认为false|
-| `networkTimeout` | Object | 否 | 网络超时时间|
+1. `pages` 字段 —— 用于描述当前小程序所有页面路径，这是为了让客户端知道当前你的小程序页面定义在哪里。
+1. `window` 字段 —— 定义小程序所有页面的背景颜色等。
 
+其他配置项细节可以参考文档 [配置小程序](./config.md) 。
 
 ### 页面配置 page.json
 
-每一个小程序页面也可以使用同名 .json 文件来对本页面的窗口表现进行配置，页面中配置项会覆盖 app.json 的 window 中相同的配置项。详细配置如下：
+这里的 page.json 其实用来表示 `pages/home` 目录下的 `home.json` 这类和小程序页面相关的配置。
 
-``` json
-{
-    "backgroundColor": "#000000",
-    "navigationBarTitleText": "标题示例"
-}
-```
+其他配置项细节可以参考文档 [配置小程序](./config.md) 。
 
-参数介绍:
+### JSON 语法
 
-| 属性 | 类型 | 默认值 | 描述 |
-| :---: | :-----: | :----: | :-------: |
-| `backgroundColor` | string | #ffffff | 窗口的背景色|
-| `navigationBarTitleText` | string[] | - | 导航栏标题文字内容 |
+这里说一下小程序里JSON配置的一些注意事项。
 
-## TS 逻辑
+JSON文件都是被包裹在一个大括号中 {}，通过key-value的方式来表达数据。JSON的Key必须包裹在一个双引号中，在实践中，编写 JSON 的时候，忘了给 Key 值加双引号或者是把双引号写成单引号是常见错误。
 
-小程序代码逻辑原生支持`TypeScript`编写，例子如下：
+JSON的值只能是以下几种数据格式，其他任何格式都会触发报错，例如 JavaScript 中的 undefined。
 
-* app.ts:
+1. 数字，包含浮点数和整数
+1. 字符串，需要包裹在双引号中
+1. Bool值，true 或者 false
+1. 数组，需要包裹在方括号中 []
+1. 对象，需要包裹在大括号中 {}
+1. Null
+
+还需要注意的是 JSON 文件中无法使用注释，试图添加注释将会引发报错。
+
+## TS 逻辑交互
+
+一个服务仅仅只有界面展示是不够的，还需要和用户做交互：网络请求、响应用户点击等等。
+在小程序里边，我们就通过编写 `Typescript` 脚本文件来处理用户的操作。
+
+> 使用TS的另外一个原因是：可以在开发过程中获得更友好的代码提示和补全。
+
+在 `src/app.ts` 中我们可以处理小程序的全局交互：
 
 ``` typescript
 import {ref} from '@atom-vue/vue';
-import swan from 'kuat';
+import swan, {AppConfig} from 'kuat';
 
-interface GlobalData {
-    title: string;
-    [key: string]: any;
-}
+const appConfig: AppConfig = {
+    globalData: ref({}),
+    onLaunch() {
+        // 监听小程序初始化
+        swan.logger.info('进入小程序');
+    },
+    onShow() {
+        // 监听小程序显示
+        swan.logger.info('小程序显示');
+    },
+    onHide() {
+        // 监听小程序隐藏
+        swan.logger.info('小程序隐藏');
+    },
+    onPageNotFound() {
+        // 监听页面不存在
+        swan.logger.info('未找到目标页面');
+    },
+    beforePageChange(to, from, next) {
+        // 页面变化前守卫
+        next();
+    },
+    afterPageChange(to, from) {
+        // 页面跳转完成
+    },
+    onError() {
+        // 接收错误信息
+    }
+};
 
-swan.App({
-    globalData: ref<GlobalData>({
-        title: 'swan-app'
-    })
-});
+swan.App(appConfig);
 ```
 
-* page.ts:
+也可以在 `VUE` 文件中使用 `Typescript`，如
 
-``` typescript
+``` vue
 <script lang="ts">
 import {ref} from '@atom-vue/vue';
 import swan from 'kuat';
@@ -126,9 +167,26 @@ export default {
 </script>
 ```
 
+## 附录
+
 * [TypeScrip官方文档](https://www.typescriptlang.org/)
+* [Vue 3.0官方文档](https://vuejs.org/)
 
 ## Vue 模板
+
+小程序使用类似Vue的模板语法来构建页面部分，采用 vue 3.* 的版本。但与Vue模板语法有些许不同。
+小程序的 `vue` 模板分为：
+
+* `<template>` -- 页面的dom结构，同 `vue` 文件中的template
+* `<script data-is-style>` -- 页面的样式部分，采用 `javascript` 语法标准，类似与网页中的 `css`
+* `<script lang="ts">` -- 页面的逻辑部分，推荐 `typescript` 语法标准，同 vue 3.* 的 `js` 部分
+
+以下针对这三部分逐个介绍：
+
+### template 描述页面的Dom结构
+
+
+小程序的底层渲染引擎使用了Flutter，所以在渲染组件上需要使用flutter提供的组件和样式规范进行编码
 
 1、我们vue模板的组成
 2、标签体系，后续我们要链接到组件文档那里，说明一下样式体系都是flutter的
